@@ -1,0 +1,11 @@
+{
+    "extends": "@tsconfig/recommended/tsconfig.json",
+    "include": ["index.ts"],
+    "compilerOptions": {
+        "lib": ["ES2024", "DOM"],
+        "module": "NodeNext",
+        "moduleResolution": "nodenext",
+        "declaration": true,
+        "outDir": "dist"
+    }
+}

@@ -21,6 +21,10 @@
   "author": "zsquatch <broncoscorpio@gmail.com>",
   "license": "ISC",
   "description": "A traverser on JS objects that are JSON compliant.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GameSquatch/json_traverse"
+  },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.8",
     "typescript": "^5.7.3"

@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "npx tsc",
-    "test": "npx mocha tests/**/*.js",
+    "test": "npx mocha",
     "prepublish": "npx tsc"
   },
   "keywords": [

@@ -16,6 +16,30 @@ The idea was that a JSON file that was parsed into a JS runtime could be travers
 npm install json_traverse
 ```
 
+## v2.0.1
+
+This version adds traversal "continue predicates". When you define your callback functions, they are given a third parameter for continuing traversal into the structure. This function now accepts an optional argument that allows you to conditionally travel through the object, giving you more flexibility on how to travel through. Here is an example:
+
+```js
+const testObject = {
+  fields: {
+    field1: '23',
+    field2: 23,
+    field3: false,
+    field4: ['a', 'b', 'c'],
+  },
+};
+
+traverse(testObject, {
+  objectCallback: (obj, context, next) => {
+    next((fieldName, fieldValue) => fieldName === 'field4' || typeof fieldValue === 'number');
+  },
+  arrayCallback: (arr, context, next) => next((item, index) => index > 1),
+});
+```
+
+This will only trigger callbacks for `field4`, `field2`, and the 3<sup>rd</sup> item inside of the `field4` array ('c'). Keep in mind that this predicate will apply to the entire sub-tree at the moment it is defined. So in this example, if `field4` were an object instead of an array, the predicate would apply to its fields as well. You may also notice that the predicate for objects is slightly different for the one for arrays.
+
 ## v2.0
 
 Some important changes come in version 2.0.

@@ -20,7 +20,9 @@ export function traverse(obj: JsonPrimitive | JsonArray | JsonObject, traversalC
        * Not calling it will halt traversal in that particular sub-tree since this algorithm
        * is depth-first.
        */
-      const traverseArray = (continuePredicate = (item: JsonPrimitive | JsonObject, index: number) => true) => {
+      const traverseArray = (
+        continuePredicate = (item: JsonPrimitive | JsonObject | JsonArray, index: number) => true
+      ) => {
         $obj.forEach((item, i) => {
           if (continuePredicate(item, i)) {
             context.path.push(`#${i}`);
@@ -67,10 +69,10 @@ export function traverse(obj: JsonPrimitive | JsonArray | JsonObject, traversalC
 }
 
 type JsonPrimitive = string | number | boolean | null;
-type JsonArray = JsonPrimitive[] | JsonObject[];
+type JsonArray = JsonPrimitive[] | JsonObject[] | JsonArray[];
 type JsonObject = { [key: string]: JsonPrimitive | JsonArray | JsonObject };
 type JsonObjectContinuePredicate = (fieldName: string, fieldValue: JsonPrimitive | JsonObject | JsonArray) => boolean;
-type JsonArrayContinuePredicate = (item: JsonPrimitive | JsonObject, index: number) => boolean;
+type JsonArrayContinuePredicate = (item: JsonPrimitive | JsonObject | JsonArray, index: number) => boolean;
 
 type TraversableCallback<TEncountered> = (
   encounteredData: TEncountered,

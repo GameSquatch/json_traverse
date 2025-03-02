@@ -23,7 +23,7 @@
   "description": "A traverser on JS objects that are JSON compliant.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GameSquatch/json_traverse"
+    "url": "git+https://github.com/GameSquatch/json_traverse.git"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.8",

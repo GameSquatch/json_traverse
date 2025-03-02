@@ -78,7 +78,7 @@ type TraversableCallback<TEncountered> = (
   encounteredData: TEncountered,
   context: TraversalContext,
   justKeepSwimming: (
-    continuePredicate: TEncountered extends JsonObject ? JsonObjectContinuePredicate : JsonArrayContinuePredicate
+    continuePredicate?: TEncountered extends JsonObject ? JsonObjectContinuePredicate : JsonArrayContinuePredicate
   ) => void
 ) => void;
 

@@ -20,11 +20,13 @@ export function traverse(obj: JsonPrimitive | JsonArray | JsonObject, traversalC
        * Not calling it will halt traversal in that particular sub-tree since this algorithm
        * is depth-first.
        */
-      const traverseArray = () => {
+      const traverseArray = (continuePredicate = (item: JsonPrimitive | JsonObject, index: number) => true) => {
         $obj.forEach((item, i) => {
-          context.path.push(`#${i}`);
-          $traverse(item, context);
-          context.path.pop();
+          if (continuePredicate(item, i)) {
+            context.path.push(`#${i}`);
+            $traverse(item, context);
+            context.path.pop();
+          }
         });
       };
       if (arrayCallback) {
@@ -39,11 +41,15 @@ export function traverse(obj: JsonPrimitive | JsonArray | JsonObject, traversalC
        * Not calling it will halt traversal in that particular sub-tree since this algorithm
        * is depth-first.
        */
-      const traverseObject = () => {
+      const traverseObject = (
+        continuePredicate = (fieldName: string, fieldValue: JsonPrimitive | JsonObject | JsonArray) => true
+      ) => {
         Object.entries($obj).forEach(([key, item]) => {
-          context.path.push(key);
-          $traverse(item, context);
-          context.path.pop();
+          if (continuePredicate(key, item)) {
+            context.path.push(key);
+            $traverse(item, context);
+            context.path.pop();
+          }
         });
       };
 
@@ -63,11 +69,15 @@ export function traverse(obj: JsonPrimitive | JsonArray | JsonObject, traversalC
 type JsonPrimitive = string | number | boolean | null;
 type JsonArray = JsonPrimitive[] | JsonObject[];
 type JsonObject = { [key: string]: JsonPrimitive | JsonArray | JsonObject };
+type JsonObjectContinuePredicate = (fieldName: string, fieldValue: JsonPrimitive | JsonObject | JsonArray) => boolean;
+type JsonArrayContinuePredicate = (item: JsonPrimitive | JsonObject, index: number) => boolean;
 
 type TraversableCallback<TEncountered> = (
   encounteredData: TEncountered,
   context: TraversalContext,
-  justKeepSwimming: () => void
+  justKeepSwimming: (
+    continuePredicate: TEncountered extends JsonObject ? JsonObjectContinuePredicate : JsonArrayContinuePredicate
+  ) => void
 ) => void;
 
 interface TraverseCallbackOpts {

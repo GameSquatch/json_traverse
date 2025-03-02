@@ -87,4 +87,28 @@ describe('traverse()', function () {
 
     expect(maxDepth).to.equal(4);
   });
+
+  it('only processes 2 keys using an object predicate', function () {
+    let keysTravelledCount = 0;
+    traverse(obj, {
+      objectCallback: (data, context, next) => {
+        keysTravelledCount += 1;
+        next((fieldName, fieldValue) => fieldName === 'other');
+      },
+    });
+
+    expect(keysTravelledCount).to.equal(2);
+  });
+
+  it('only processes 2 array items using an array predicate', function () {
+    let itemsTravelledCount = 0;
+    traverse(obj, {
+      arrayCallback: (data, context, next) => {
+        itemsTravelledCount += 1;
+        next((item, i) => i === 0);
+      },
+    });
+
+    expect(itemsTravelledCount).to.equal(2);
+  });
 });

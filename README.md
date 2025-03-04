@@ -2,6 +2,9 @@
 
 This is a package I will be using as a dependency to another project, so support may be limited.
 
+- [v2.0 Usage](#v20-usage)
+- [v1.0 Usage](#v10-usage)
+
 ## Features
 
 The goal of this package was to provide a function that would traverse a JSON-like JavaScript object recursively, and call provided callback functions as it found Objects, Arrays, and primitive values (string, number, boolean, and `null`);
@@ -63,9 +66,90 @@ traverse(testObject, {
 
 Second, as you may have noticed in the last code snippet, callback functions have now been typed as optional. If a callback is not provided, traversal will continue by default. The named parameters have also been expanded from `Cb` to the full word `Callback`.
 
-## v1.0
+## v2.0+ Usage
 
-## Usage
+```js
+import { traverse } from 'json_traverse';
+// OR
+const { traverse } = require('json_traverse');
+```
+
+We'll use this object in the following examples:
+
+```js
+const testObject = {
+  stringField: 'hello',
+  numberField: 42,
+  boolField: false,
+  nullField: null,
+  objectField: {
+    you: {
+      can: {
+        goManyLevelsDeep: ['a', 'b', 'c'],
+      },
+    },
+  },
+  nestArrays: [
+    [120.12, 76.2],
+    [34.01, 67.66666667],
+  ],
+  objectArrays: [
+    {
+      iAmInAnArray: 'how neat',
+    },
+  ],
+};
+```
+
+Minimal usage looks like this:
+
+```js
+traverse(testObject, {
+  objectCallback: (obj, context, next) => next(),
+  arrayCallback: (arr, context, next) => next(),
+  primitiveCallback: (primitiveValue, context) => console.log(primitiveValue),
+});
+```
+
+The path is tracked in the context:
+
+```js
+traverse(testObject, {
+  primitiveCallback: (value, context) => {
+    if (value === 'how neat') {
+      console.log(context.path); // ['__root', 'objectArrays', '#0', 'iAmInAnArray' ]
+    }
+  },
+});
+```
+
+Notice how the first item is `__root` and how array indexes use `#` followed by the index.
+
+Conditionally travel through sub-trees:
+
+```js
+traverse(testObject, {
+  objectCallback: (obj, context, next) => {
+    const key = context.path[context.path.length - 1];
+    if (key !== 'objectField') {
+      // you.can.goManyLevelsDeep is skipped
+      next();
+    }
+  },
+});
+```
+
+The new way to do the above is to use the `next` function's predicate argument:
+
+```js
+traverse(testObject, {
+  objectCallback: (obj, context, next) => {
+    next((key, value) => key !== 'objectField');
+  },
+});
+```
+
+## v1.0 Usage
 
 ```js
 import { traverse } from 'json_traverse';

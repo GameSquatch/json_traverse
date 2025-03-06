@@ -4,6 +4,7 @@ This is a package I will be using as a dependency to another project, so support
 
 - [v2.0 Usage](#v20-usage)
 - [v1.0 Usage](#v10-usage)
+- [Roadmap](#roadmap)
 
 ## Features
 
@@ -101,7 +102,7 @@ const testObject = {
 };
 ```
 
-Minimal usage looks like this:
+Minimal usage looks like this, where calling `next()` simply continues traversal. This is equivalent to removing the arguments altogether, since traversal will continue by default.
 
 ```js
 traverse(testObject, {
@@ -111,7 +112,7 @@ traverse(testObject, {
 });
 ```
 
-The path is tracked in the context:
+The path is tracked in the context by default and can be accessed through `context.path`.
 
 ```js
 traverse(testObject, {
@@ -205,3 +206,14 @@ The context contains the path to the element that was found in the form of a lis
 ```
 
 You may also add any value you like to the context and it will be passed throughout the traversal until you explicitly remove it.
+
+## Roadmap
+
+I don't have anything planned beyond what this has now. Some ideas floating in my head are:
+
+- Calling a next predicate and consuming it after one true result, so that it won't apply to the rest of the tree during traversal. Maybe a consume count and similar to the `addEventListener`'s `once` option.
+- Adding callbacks for other types like BigInt, Date, Symbol, Functions
+- Adding configuration to traverse through custom types using `instanceof`
+- Adding a function that traverses breadth-first as opposed to depth-first or possibly making that an option in the original function
+
+The main drivers for change to this package, at the moment, are my other projects. I am always open to suggestions or PRs to the GitHub project.
